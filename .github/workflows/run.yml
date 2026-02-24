@@ -13,19 +13,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+    jobs:
+  build:
+    runs-on: ubuntu-latest
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-    - name: Install packages
-      run: pip install -r requirements.txt
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Run US Brief
-      run: python maket_brief_us.py
+      - name: Install packages
+        run: |
+          pip install -r requirements.txt
 
-    - name: Run AE Brief
-      run: python market_brief_ae.py
+      # ===== US MORNING =====
+      - name: Run US Brief
+        run: python maket_brief_us.py
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      # ===== ASIA EUROPE AFTERNOON =====
+      - name: Run AE Brief
+        run: python market_brief_ae.py
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
