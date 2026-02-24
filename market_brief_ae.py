@@ -65,14 +65,32 @@ RSS_FEEDS = [
 # -------------------------
 # PRICE HELPERS
 # -------------------------
-def fetch_last_two_closes(ticker: str):
-    data = yf.download(ticker, period=f"{PRICE_DAYS}d", interval="1d", progress=False)
-    if data is None or data.empty or "Close" not in data:
+def fetch_last_two_closes(ticker):
+    data = yf.download(
+        ticker,
+        period=f"{PRICE_DAYS}d",
+        interval="1d",
+        progress=False,
+        auto_adjust=False,
+        group_by="column"
+    )
+    if data is None or data.empty:
         return None, None
-    closes = data["Close"].dropna()
-    if len(closes) < 2:
+
+    # yfinance 有时返回 MultiIndex columns（例如 ('Close', 'TSLA')）
+    close = data["Close"] if "Close" in data.columns else None
+    if close is None:
         return None, None
-    return float(closes.iloc[-1]), float(closes.iloc[-2])
+
+    # 如果 Close 还是一个 DataFrame（多层/多列），取第一列（单 ticker 时也安全）
+    if isinstance(close, pd.DataFrame):
+        close = close.iloc[:, 0]
+
+    close = close.dropna()
+    if len(close) < 2:
+        return None, None
+
+    return float(close.iloc[-1]), float(close.iloc[-2])
 
 def pct_change(last, prev):
     if last is None or prev is None or prev == 0:
