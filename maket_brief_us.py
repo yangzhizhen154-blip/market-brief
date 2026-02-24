@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1XxGOHNI5WRs7d0r9HQkvajd-WnamhlOj
 """
 
-!pip install yfinance feedparser pandas python-dateutil lxml
+
 
 import re
 from datetime import datetime, timezone, timedelta
