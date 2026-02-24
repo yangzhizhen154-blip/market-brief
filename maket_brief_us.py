@@ -432,8 +432,6 @@ with open("market_brief.txt","w") as f:
     import sys
     f.write(sys.stdout.getvalue() if hasattr(sys.stdout, "getvalue") else "")
 
-from google.colab import files
-files.download("market_brief.txt")
 
 
 
