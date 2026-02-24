@@ -1,0 +1,31 @@
+name: Market Brief Automation
+
+on:
+  schedule:
+    # 9:00 Singapore = 01:00 UTC
+    - cron: '0 1 * * *'
+    # 16:30 Singapore = 08:30 UTC
+    - cron: '30 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install packages
+      run: pip install -r requirements.txt
+
+    - name: Run US Brief
+      run: python maket_brief_us.py
+
+    - name: Run AE Brief
+      run: python market_brief_ae.py
