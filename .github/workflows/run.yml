@@ -2,18 +2,13 @@ name: Market Brief Automation
 
 on:
   schedule:
-    # 9:00 Singapore = 01:00 UTC
+    # 09:00 Singapore = 01:00 UTC
     - cron: '0 1 * * *'
     # 16:30 Singapore = 08:30 UTC
     - cron: '30 8 * * *'
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    jobs:
   build:
     runs-on: ubuntu-latest
 
@@ -27,16 +22,13 @@ jobs:
           python-version: '3.11'
 
       - name: Install packages
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-      # ===== US MORNING =====
       - name: Run US Brief
         run: python maket_brief_us.py
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      # ===== ASIA EUROPE AFTERNOON =====
       - name: Run AE Brief
         run: python market_brief_ae.py
         env:
