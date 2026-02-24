@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1Pltvg5vF9tMAm1k_ixMKLAfd94IacYWA
 """
 
-!pip -q install yfinance feedparser pandas python-dateutil lxml google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
 
 import re
 import os
