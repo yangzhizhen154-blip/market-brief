@@ -10,13 +10,16 @@ Original file is located at
 !pip -q install yfinance feedparser pandas python-dateutil lxml google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 import re
-from datetime import datetime, timezone, timedelta
+import os
+import json
+from google.oauth2 import service_account
+from googleapiclient.discovery import buildfrom datetime import datetime, timezone, timedelta
 
 import yfinance as yf
 import feedparser
 from dateutil import parser as dateparser
 
-from google.colab import auth
+
 from googleapiclient.discovery import build
 
 # =========================
@@ -291,8 +294,15 @@ print(report_text)
 # -------------------------
 # WRITE INTO GOOGLE DOC (AE)
 # -------------------------
-auth.authenticate_user()
-docs = build("docs", "v1")
+# --- Google Service Account login ---
+creds_json = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+
+credentials = service_account.Credentials.from_service_account_info(
+    creds_json,
+    scopes=["https://www.googleapis.com/auth/documents"]
+)
+
+docs = build("docs", "v1", credentials=credentials)
 
 doc = docs.documents().get(documentId=DOC_ID).execute()
 end_index = doc["body"]["content"][-1]["endIndex"]
