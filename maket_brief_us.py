@@ -417,7 +417,7 @@ with open("market_brief.txt","w") as f:
 from google.colab import files
 files.download("market_brief.txt")
 
-!pip -q install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
 
 from googleapiclient.discovery import build
 import os
