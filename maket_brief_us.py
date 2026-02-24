@@ -420,8 +420,20 @@ files.download("market_brief.txt")
 !pip -q install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 from googleapiclient.discovery import build
-from google.colab import auth
-auth.authenticate_user()
+import os
+import json
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
+# 读取 GitHub Secret
+creds_json = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+
+credentials = service_account.Credentials.from_service_account_info(
+    creds_json,
+    scopes=["https://www.googleapis.com/auth/documents"]
+)
+
+docs = build("docs", "v1", credentials=credentials)
 
 DOC_ID = "1HnmP996GEPun9whNo7xN-zY9AIrtoQIxQLG2Nf9EPb8"
 
